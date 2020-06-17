@@ -1,0 +1,98 @@
+[CASEID]
+  title 'BWR Peach Bottom 2 Design 6 8x8'
+
+!------------------------------------------------------------------------------
+!
+!  Design 6 (LTA)
+!  8x8 with 100 mil channel
+!  2 water rods
+!  2% gad
+!
+! Reference 1:
+!   NEA/NSC/DOC(2001)1
+!   BOILING WATER REACTOR TURBINE TRIP (TT) BENCHMARK
+!   Volume I: Final Specifications
+!   February 2001
+!
+! Reference 2:
+!   APED-4426
+!   EFFECTS OF IRRADIATION ON B4C FILLED STAINLESS STEEL TUBES
+!        IN THE DRESDEN NUCLEAR POWER STATION
+!   March 1964
+!   Williamson & Zimmerman
+!
+!------------------------------------------------------------------------------
+
+[STATE]
+  power    100.0
+  ! modify temps to compare with Monte Carlo reference
+  tinlet   600 K  ! *** average operating temperature, not inlet 
+  tfuel    900 K
+  pressure 1040   ! psia
+  sym      full
+  void      0.0    ! Progression Problems at: 0, 40, 80
+
+[CORE]
+  reactor_type BWR
+  size   1
+  apitch 15.24
+  height 1.0
+  rated  0.01 0.01   ! *** approximate
+
+  core_shape
+    1
+
+  assm_map
+    ASSY
+
+  bc_rad reflecting
+  bc_top reflecting
+  bc_bot reflecting
+
+  mat zr2  6.5514 zirc2      ! zirc density Ref. 1, p. 39
+  mat zr4  6.5514 zirc4
+  mat he   0.000176 he-4
+
+[ASSEMBLY]
+  npin   8
+  ppitch 1.6256          ! pin pitch - does not include channel gaps
+  
+!*** 100 mil design
+  gap    0.9017 .42418   ! wide and narrow channel gap (cm)
+  channel_box zr4 0.254 0.9652 0.0 0.0   ! channel dimensions 
+
+!*** enrichments Ref. 1, p. 18
+!*** density and materials Ref. 1, p. 12
+  
+  fuel U301  10.32 94.5 / 3.01
+  fuel U222  10.32 94.5 / 2.22
+  fuel U187  10.32 94.5 / 1.87
+  fuel U145  10.32 94.5 / 1.45
+  fuel U3G   10.23 94.5 / 3.01 / gad=2.0
+ 
+  cell 1   0.5207 0.53213 0.61341 / U301 he zr2
+  cell 2   0.5207 0.53213 0.61341 / U222 he zr2
+  cell 3   0.5207 0.53213 0.61341 / U187 he zr2
+  cell 4   0.5207 0.53213 0.61341 / U145 he zr2
+  cell 5G  0.5207 0.53213 0.61341 / U3G  he zr2
+  cell WR         0.67437 0.75057 /    mod  zr2  ! large WR
+ 
+  lattice LAT
+    4
+    3  2
+    2  1  1
+    2  5G 1  1
+    2  1  1 WR  1
+    2  1  1  1  1  1
+    2  1  5G 1  1  1 5G
+    3  2  1  1  1  1  1  2
+
+  axial ASSY 0.0 LAT 1.0
+
+[MPACT]
+  num_space      1
+  num_angle     -8
+  num_threads    1
+  grid_treatment homogenize
+  ray_spacing  0.01
+  power_edit FISSION

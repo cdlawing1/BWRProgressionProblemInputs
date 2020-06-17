@@ -1,0 +1,186 @@
+[CASEID]
+  title '10x10 GE-14 Lattice with OEM Control Blade: 0.0% void'
+
+!------------------------------------------------------------------------------
+!
+! Reference 1:
+!
+!   "Depletion of a BWR Lattice Using the RACER Continuous Energy Monte Carlo Code"
+!   D. J. Kelly
+!   Proc. Int. Conf. on Math and Comp., Reactor Physics, and Env. Analysis,
+!   Portland, Oregon, USA, April 30-May 4 (1995).
+!
+! Reference 2:
+!   NEA/NSC/DOC(2001)1
+!   "BOILING WATER REACTOR TURBINE TRIP (TT) BENCHMARK"
+!   Volume I: Final Specifications
+!   February 2001
+!
+! Reference 3:
+!   APED-4426
+!   "EFFECTS OF IRRADIATION ON B4C FILLED STAINLESS STEEL TUBES
+!        IN THE DRESDEN NUCLEAR POWER STATION"
+!   March 1964
+!   Williamson & Zimmerman
+! 
+! Reference 4: 
+!   TR-10-13
+!   "Spent nuclear fuel for disposal in the KBS-3 Repository"
+!   Svensk Kärnbränslehantering AB
+!   December 2010
+!   https://skb.se/upload/publications/pdf/tr-10-13.pdf
+!
+! Reference 5:
+!   SE-GD-0136
+!   "UK ABWR Generic Design Assessment"
+!   GE Hitachi
+!   http://www.hitachi-hgne-uk-abwr.co.uk/downloads/2017-12-14/UKABWR-GA91-9101-0101-11000-RevC-PB.pdf
+!
+! Reference 6: 
+!   "Optimum Boiling Water Reactor Fuel Design Strategies to
+!        Enhance Reactor Shutdown by the Standby Liquid Control System"
+!   Michael Fensin, UF thesis 
+!   2004
+!   http://etd.fcla.edu/UF/UFE0005364/fensin_m.pdf
+!
+!------------------------------------------------------------------------------
+
+
+
+! Some general info for BWR
+!  3926 MWth        Ref. 5
+!  872 Assms        Ref. 5
+!  115.08012 Mlb/h  Ref. 5
+
+
+
+[STATE]
+  power               100.0
+  tinlet              600.0 K 
+  tfuel               900.0 K 
+  pressure             1040 ! psia Ref. 5
+  sym                  full
+  feedback              off
+  rodbank               A 0
+  void                  0.0
+  
+  
+
+
+
+
+
+[CORE]
+  reactor_type          BWR
+  size                    1
+  apitch              15.24 ! for BWR (Ref. 5 has this as the pitch for BWR5 assemblies)
+  height                1.0
+  rated           0.0122 0.01 ! estimate using ABWR data assume 10% bypass flow
+  core_shape       
+      1
+  assm_map       
+     ASSY1
+  crd_map
+    BLADE
+
+  bc_rad         reflecting
+  bc_top         reflecting
+  bc_bot         reflecting
+  mat            zr2 6.56 zirc2
+  mat            zr4 6.56 zirc4
+  crd_bank   A
+
+
+[ASSEMBLY]
+  title "GE14 (best estimate) lattice"
+  npin                   10
+  ppitch                1.3 ! Ref. 4
+  gap            0.7549 0.7549 ! C lattice with 65 mil channel box and 13.4 cm internal channel box dim from Ref. 4
+  channel_box    zr4 0.1651 0.9652 0.0 0.0 ! thickness from Ref. 4 (rounded up by 0.0001 to be 65 mils), radius from old 80 mil design (Ref. 1)
+
+
+  fuel           U16  10.4  94.5 / 1.6     ! non gad fuel density from Table A-3 in Ref. 4
+  fuel           U28  10.4  94.5 / 2.8
+  fuel           U32  10.4  94.5 / 3.2
+  fuel           U36  10.4  94.5 / 3.6
+  fuel           U40  10.4  94.5 / 3.95
+  fuel           U44  10.4  94.5 / 4.4
+  fuel           U49  10.4  94.5 / 4.9
+
+! gad pin density estimated using Ref. 2
+
+  fuel           U40G8 10.19  94.5 / 3.95 / gad=8.0 
+  fuel           U44G6 10.19  94.5 / 4.4  / gad=6.0
+  fuel           U44G3 10.19  94.5 / 4.4  / gad=3.0 
+  fuel           U49G8 10.19  94.5 / 4.9  / gad=8.0
+  fuel           U49G6 10.19  94.5 / 4.9  / gad=6.0
+
+  ! pin dimensions from Ref. 4
+  cell           1  0.438 0.447 0.515 / U16   he zr2
+  cell           2  0.438 0.447 0.515 / U28   he zr2
+  cell           3  0.438 0.447 0.515 / U32   he zr2
+  cell           4  0.438 0.447 0.515 / U36   he zr2
+  cell           5  0.438 0.447 0.515 / U40   he zr2
+  cell           6  0.438 0.447 0.515 / U44   he zr2
+  cell           7  0.438 0.447 0.515 / U49   he zr2
+  cell           5G 0.438 0.447 0.515 / U40G8 he zr2
+  cell           6H 0.438 0.447 0.515 / U44G6 he zr2
+  cell           7G 0.438 0.447 0.515 / U49G8 he zr2
+  cell           7H 0.438 0.447 0.515 / U49G6 he zr2
+  cell           6K 0.438 0.447 0.515 / U44G3 he zr2
+  ! WR dims from Ref. 4
+  cell           WR 1.17 1.245 / mod zr4 / large4
+
+
+
+  
+  lattice        LAT
+
+  ! pattern from Ref. 6 DOM region
+    1
+    2  2
+    3  3  6K
+    5  5  6   7G
+    5  4  7H  5  7
+    5  5G 6   WR WR 7
+    5  5  6H  WR WR 7  7
+    5  6H 6   7  7  7  7G 7
+    5  5  6H  7  7  7G 7  7G 7
+    2  5  7   7  7  7  7  7  7  3 
+
+  axial          ASSY1  0.0 LAT 1.0
+
+[CONTROL]
+  title          "GE OEM Control Blade"
+  ! blade data from Ref. 2, Table 2.4.2
+  ! theoretical B4C density taken to be 2.504 g/cc (Ref. 3, Pg. 2)
+  npin                  10
+  stroke          365.76 48
+
+  mat            ss304 8.0  ss
+  mat            abs   1.7528 b4c ! 70% theoretical density
+
+  cell           TUBE 0.17526 0.23876 / abs ss304
+  blade          21 TUBE 12.3825 0.79248 0.39624 0.14224  1.98501  ss304
+  
+  rodmap         EMPTY
+    TUBE
+    - -
+    - - -
+    - - - -
+    - - - - -
+    - - - - - -
+    - - - - - - -
+    - - - - - - - -
+    - - - - - - - - -
+    - - - - - - - - - -
+
+  axial          BLADE 0.0 EMPTY 1.0
+
+[MPACT]
+  num_space               1
+  num_angle              -8
+  num_threads             1
+  grid_treatment homogenize ! Needed for BWR
+  ray_spacing          0.01 ! Needed for BWR
+  power_edit        FISSION
