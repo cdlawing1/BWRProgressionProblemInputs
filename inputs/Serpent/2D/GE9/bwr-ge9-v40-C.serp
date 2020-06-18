@@ -6,6 +6,13 @@ set title "2D GE-9 BWR Lattice: 40% Void, Controlled"
 %    Printed by VTM on May 09, 2020 at 09:46 PM
 %
 %
+% ==============================================================
+%
+%    CASL BWR Progression Problems
+%    VERSION: Draft Release 1
+%    https://github.com/cdlawing1/BWRProgressionProblemInputs
+%
+% ==============================================================
 %
 %         CELL CARDS
 %

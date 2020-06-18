@@ -1,5 +1,14 @@
 [CASEID]
   title '2D GE9 BWR Lattice'
+
+! ==============================================================
+!  
+!    CASL BWR Progression Problems
+!    VERSION: Draft Release 1
+!    https://github.com/cdlawing1/BWRProgressionProblemInputs
+!
+! ==============================================================
+
 !------------------------------------------------------------------------------
 !
 ! *** Note that this input deck is not correct because we do not currently model

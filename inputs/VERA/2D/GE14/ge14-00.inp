@@ -1,6 +1,14 @@
 [CASEID]
   title '10x10 GE-14 Lattice: 0.0% void'
 
+! ==============================================================
+!  
+!    CASL BWR Progression Problems
+!    VERSION: Draft Release 1
+!    https://github.com/cdlawing1/BWRProgressionProblemInputs
+!
+! ==============================================================
+
 !------------------------------------------------------------------------------
 !
 ! Reference 1:

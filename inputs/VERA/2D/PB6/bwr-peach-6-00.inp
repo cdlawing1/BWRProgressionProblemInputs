@@ -1,6 +1,14 @@
 [CASEID]
   title 'BWR Peach Bottom 2 Design 6 8x8'
 
+! ==============================================================
+!  
+!    CASL BWR Progression Problems
+!    VERSION: Draft Release 1
+!    https://github.com/cdlawing1/BWRProgressionProblemInputs
+!
+! ==============================================================
+
 !------------------------------------------------------------------------------
 !
 !  Design 6 (LTA)

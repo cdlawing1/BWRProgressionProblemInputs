@@ -1,6 +1,14 @@
 [CASEID]
 title '4x4 array of GE-14 bundles with 0% average void and OEM Control Blade'
 
+! ==============================================================
+!  
+!    CASL BWR Progression Problems
+!    VERSION: Draft Release 1
+!    https://github.com/cdlawing1/BWRProgressionProblemInputs
+!
+! ==============================================================
+
 !------------------------------------------------------------------------------
 !
 ! Reference 1:

@@ -1,6 +1,14 @@
 [CASEID]
   title '3D GE-14 Bundle at HFP, 40% Uniform Void'
 
+! ==============================================================
+!  
+!    CASL BWR Progression Problems
+!    VERSION: Draft Release 1
+!    https://github.com/cdlawing1/BWRProgressionProblemInputs
+!
+! ==============================================================
+
 !------------------------------------------------------------------------------
 !
 ! Reference 1:
