@@ -9,8 +9,11 @@ set title "BWR Peach Bottom 2 Design 6 8x8: 0% Void, Uncontrolled"
 % ==============================================================
 %
 %    CASL BWR Progression Problems
-%    VERSION: Draft Release 1 (6/15/2020)
+%    Initial Version: Draft Release 1
+%    Current Version: Draft Release 1
 %    https://github.com/cdlawing1/BWRProgressionProblemInputs
+%    Input Release Date: 6/15/2020
+%    Date Last Updated: 6/15/2020
 %
 % ==============================================================
 %

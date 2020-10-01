@@ -4,8 +4,18 @@
 ! ==============================================================
 !  
 !    CASL BWR Progression Problems
-!    VERSION: Draft Release 1 (6/15/2020)
+!    Initial Version: Draft Release 1
+!    Current Version: Final Release Rev. 0
 !    https://github.com/cdlawing1/BWRProgressionProblemInputs
+!    Input Release Date: 6/15/2020
+!    Date Last Updated:  9/30/2020
+!
+!    Updates:
+!      *) 9/30/2020:
+!          - Specifically turn off feedback
+!          - Specifically turn off thermal expansion
+!          - Use P2 scattering
+!          - Use 'cool' instead of 'mod' in vanished rods
 !
 ! ==============================================================
 
@@ -68,6 +78,7 @@
   tfuel               900.0 K 
   pressure             1040 ! psia Ref. 5
   sym                  full
+  thexp                 off
   feedback              off
   void                  0.0
   
@@ -132,7 +143,7 @@
   cell           7H 0.438 0.447 0.515 / U49G6 he zr2
   cell           6K 0.438 0.447 0.515 / U44G3 he zr2
   ! vanished rod
-  cell           V              0.515 / mod
+  cell           V              0.515 / cool
   ! WR dims from Ref. 4
   cell           WR 1.17 1.245 / mod zr4 / large4
 
@@ -162,3 +173,4 @@
   grid_treatment homogenize ! Needed for BWR
   ray_spacing          0.01 ! Needed for BWR
   power_edit        FISSION
+  scattering             P2

@@ -1,4 +1,4 @@
-10x10 Lattice HFP 0.0% void
+GE-14 lattice with vanished rods: 80% Void, Controlled
 c
 c
 c
@@ -10,9 +10,20 @@ c
 c ==============================================================
 c
 c    CASL BWR Progression Problems
-c    VERSION: Draft Release 1 (6/15/2020)
+c    Initial Version: Draft Release 1
+c    Current Version: Draft Release 1
 c    https://github.com/cdlawing1/BWRProgressionProblemInputs
+c    Input Release Date: 6/15/2020
+c    Date Last Updated: 6/17/2020
 c
+c    Updates:
+c      *) 6/17/2020
+c          - Updated to use pin centered subchannels instead of
+c            coolant centered subchannels
+c            *** This doesn't effect the results because the 
+c                coolant density is uniform, but is consistent 
+c                with the other MCNP inputs for the BWR 
+c                Progression problems.
 c ==============================================================
 c
 c         CELL CARDS

@@ -4,8 +4,17 @@
 ! ==============================================================
 !  
 !    CASL BWR Progression Problems
-!    VERSION: Draft Release 1 (6/15/2020)
+!    Initial Version: Draft Release 1
+!    Current Version: Final Release Rev. 0
 !    https://github.com/cdlawing1/BWRProgressionProblemInputs
+!    Input Release Date: 6/15/2020
+!    Date Last Updated:  9/30/2020
+!
+!    Updates:
+!      *) 9/30/2020:
+!          - Specifically turn off feedback
+!          - Specifically turn off thermal expansion
+!          - Use P2 scattering
 !
 ! ==============================================================
 
@@ -44,6 +53,8 @@
   tfuel    900 K
   pressure 1040   ! psia
   sym      full
+  feedback  off
+  thexp     off
   rodbank A 0
   void    0.0     ! Progression Problems at 0, 40, 80
 
@@ -161,3 +172,4 @@
   grid_treatment homogenize   ! needed for BWR
   ray_spacing 0.01            ! needed for BWR
   power_edit   FISSION
+  scattering    P2

@@ -1,0 +1,139 @@
+[CASEID]
+  title 'Depletion of 2D GE9 BWR Lattice'
+
+! ==============================================================
+!  
+!    CASL BWR Progression Problems
+!    Initial Version: Final Release Rev. 0
+!    Current Version: Final Release Rev. 0
+!    https://github.com/cdlawing1/BWRProgressionProblemInputs
+!    Input Release Date: 9/30/2020
+!    Date Last Updated:  9/30/2020
+!
+! ==============================================================
+
+!------------------------------------------------------------------------------
+!
+! *** Note that this input deck is not correct because we do not currently model
+! *** the oversize GE9 water rod at this time
+! *** The large water rod diameter has been reduced to fit in 2 pincells
+!
+! Reference 1:
+!   D. J. Kelly,
+!   "Depletion of a BWR Lattice Using the RACER Continuous Energy Monte Carlo Code,"
+!   Proc. Int. Conf. on Math and Comp., Reactor Physics, and Env. Analysis,
+!   Portland, Oregon, USA, April 30-May 4 (1995).
+!
+! Reference 2:
+!   NEA/NSC/DOC(2001)1
+!   BOILING WATER REACTOR TURBINE TRIP (TT) BENCHMARK
+!   Volume I: Final Specifications
+!   February 2001
+!
+! Reference 3:
+!   APED-4426
+!   EFFECTS OF IRRADIATION ON B4C FILLED STAINLESS STEEL TUBES
+!        IN THE DRESDEN NUCLEAR POWER STATION
+!   March 1964
+!   Williamson & Zimmerman
+!
+!
+!------------------------------------------------------------------------------
+
+[STATE]
+  power    100.0
+  ! temperatures match MCNP/Serpent library temperatures
+  tinlet   600 K  ! *** approximate 
+  tfuel    900 K
+  pressure 1040   ! psia
+  sym      full
+  thexp     off
+  feedback  off
+  void    0.0     ! Progression Problems at 0, 40, 80
+  deplete GWDMT 0.0 0.1 0.25 <0.5..25x0.25> <26.0..50x1.0>
+  pred_order 1
+  corr_order 2
+
+
+[CORE]
+  reactor_type BWR
+  size   1
+  apitch 15.24  ! Ref. 1
+  height 1.0
+  rated 0.0188 0.01   ! estimate 40 W/g
+  core_shape
+    1
+  assm_map
+    ASSY
+
+  bc_rad reflecting
+  bc_top reflecting
+  bc_bot reflecting
+
+  mat zr2  6.56 zirc2
+  mat zr4  6.56 zirc4
+
+[ASSEMBLY]
+  ! Bundle Geometry, fuel densities, U-235 & Gad enrichment from Ref. 1
+  npin   8
+  ppitch 1.6256          ! pin pitch - does not include channel gaps
+
+!*** 80 mil design
+  gap    0.9525 .47498   ! wide and narrow channel gap (cm)
+  channel_box  zr4 0.2032 0.9652 0.0 0.0   ! channel dimensions
+
+
+  fuel U16  10.0642 94.5 / 1.6
+  fuel U20  10.0642 94.5 / 2.0
+  fuel U22  10.0642 94.5 / 2.2
+  fuel U24  10.0642 94.5 / 2.4
+  fuel U26  10.0642 94.5 / 2.6
+  fuel U28  10.0642 94.5 / 2.8
+  fuel U30  10.0642 94.5 / 3.0
+  fuel U36  10.0642 94.5 / 3.6
+  fuel U36G  9.939  94.5 / 3.6 / gad=4.0
+  fuel U38  10.0642 94.5 / 3.8
+  fuel U40  10.0642 94.5 / 3.95
+  fuel U40G  9.939  94.5 / 3.95 / gad=4.0
+
+  cell  1 0.53213 0.61341 / U16  zr2
+  cell  2 0.53213 0.61341 / U20  zr2
+  cell  3 0.53213 0.61341 / U22  zr2
+  cell  4 0.53213 0.61341 / U24  zr2
+  cell  5 0.53213 0.61341 / U26  zr2
+  cell  6 0.53213 0.61341 / U28  zr2
+  cell  7 0.53213 0.61341 / U30  zr2
+  cell  8 0.53213 0.61341 / U36  zr2
+  cell  9 0.53213 0.61341 / U38  zr2
+  cell 10 0.53213 0.61341 / U40  zr2
+  cell 51 0.53213 0.61341 / U40G zr2
+  cell 52 0.53213 0.61341 / U36G zr2
+
+!** water rod is smaller to fit in a pincell
+!** cell WR 1.6002 1.7018 / mod zr4 / large4
+
+  cell WR 1.60 1.62 / mod zr4 / large4
+
+  lattice LAT
+    1
+    2  6
+    4  8 10
+    6 10 52 WR
+    6 10 10 WR WR
+    6 10 51 10 10 10
+    5  9 10 51 10 51 10
+    3  7  9 10 10 10  9  6
+
+  axial ASSY 0.0 LAT 1.0
+
+
+[MPACT]
+  num_space      1
+  num_angle     -8
+  num_threads    1
+  grid_treatment homogenize   ! needed for BWR
+  ray_spacing 0.01            ! needed for BWR
+  power_edit   FISSION
+  scattering  P2
+  depl_time_method p-c
+  dep_substep    1

@@ -4,8 +4,17 @@ title '4x4 array of GE-14 bundles with 0% average void'
 ! ==============================================================
 !  
 !    CASL BWR Progression Problems
-!    VERSION: Draft Release 1 (6/15/2020)
+!    Initial Version: Draft Release 1
+!    Current Version: Final Release Rev. 0
 !    https://github.com/cdlawing1/BWRProgressionProblemInputs
+!    Input Release Date: 6/15/2020
+!    Date Last Updated:  9/30/2020
+!
+!    Updates:
+!      *) 9/30/2020:
+!          - Specifically turn off feedback
+!          - Specifically turn off thermal expansion
+!          - Use P2 scattering
 !
 ! ==============================================================
 
@@ -69,6 +78,7 @@ title '4x4 array of GE-14 bundles with 0% average void'
   pressure             1040 ! psia Ref. 5
   sym                  full
   feedback              off
+  thexp                 off
   void                  
      0.0 0.0 0.0 0.0
      0.0 0.0 0.0 0.0
@@ -178,3 +188,4 @@ title '4x4 array of GE-14 bundles with 0% average void'
   grid_treatment homogenize ! Needed for BWR
   ray_spacing          0.01 ! Needed for BWR
   power_edit        FISSION
+  scattering             P2

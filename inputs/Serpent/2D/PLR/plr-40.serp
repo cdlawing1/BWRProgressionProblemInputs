@@ -9,8 +9,11 @@ set title "GE-14 lattice with vanished rods: 40% Void, Uncontrolled"
 % ==============================================================
 %
 %    CASL BWR Progression Problems
-%    VERSION: Draft Release 1 (6/15/2020)
+%    Initial Version: Draft Release 1
+%    Current Version: Draft Release 1
 %    https://github.com/cdlawing1/BWRProgressionProblemInputs
+%    Input Release Date: 6/15/2020
+%    Date Last Updated: 6/15/2020
 %
 % ==============================================================
 %

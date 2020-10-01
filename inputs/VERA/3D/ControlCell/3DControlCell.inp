@@ -1,0 +1,438 @@
+[CASEID]
+  title '3D Control Cell with 3/4 Inserted Control Blade'
+
+! ==============================================================
+!  
+!    CASL BWR Progression Problems
+!    Initial Version: Final Release Rev. 0
+!    Current Version: Final Release Rev. 0
+!    https://github.com/cdlawing1/BWRProgressionProblemInputs
+!    Input Release Date: 9/30/2020
+!    Date Last Updated:  9/30/2020
+!
+! ==============================================================
+
+!------------------------------------------------------------------------------
+!
+! Reference 1:
+!
+!   "Depletion of a BWR Lattice Using the RACER Continuous Energy Monte Carlo Code"
+!   D. J. Kelly
+!   Proc. Int. Conf. on Math and Comp., Reactor Physics, and Env. Analysis,
+!   Portland, Oregon, USA, April 30-May 4 (1995).
+!
+! Reference 2:
+!   NEA/NSC/DOC(2001)1
+!   "BOILING WATER REACTOR TURBINE TRIP (TT) BENCHMARK"
+!   Volume I: Final Specifications
+!   February 2001
+!
+! Reference 3:
+!   APED-4426
+!   "EFFECTS OF IRRADIATION ON B4C FILLED STAINLESS STEEL TUBES
+!        IN THE DRESDEN NUCLEAR POWER STATION"
+!   March 1964
+!   Williamson & Zimmerman
+! 
+! Reference 4: 
+!   TR-10-13
+!   "Spent nuclear fuel for disposal in the KBS-3 Repository"
+!   Svensk Kärnbränslehantering AB
+!   December 2010
+!   https://skb.se/upload/publications/pdf/tr-10-13.pdf
+!
+! Reference 5:
+!   SE-GD-0136
+!   "UK ABWR Generic Design Assessment"
+!   GE Hitachi
+!   http://www.hitachi-hgne-uk-abwr.co.uk/downloads/2017-12-14/UKABWR-GA91-9101-0101-11000-RevC-PB.pdf
+!
+! Reference 6: 
+!   "Optimum Boiling Water Reactor Fuel Design Strategies to
+!        Enhance Reactor Shutdown by the Standby Liquid Control System"
+!   Michael Fensin, UF thesis 
+!   2004
+!   http://etd.fcla.edu/UF/UFE0005364/fensin_m.pdf
+!
+! Reference 7:
+!   "General Electric Systems Technology Manual"
+!   Chapter 2.2
+!   Fuel and Control Rods System
+!   https://www.nrc.gov/docs/ML1125/ML11258A302.pdf
+!
+! Reference 8:
+!   "Core Design and Operating Data for Cycle 1 and Cycle 2 of Peach Bottom 2"
+!   N. H. Larsen 
+!   General Electric 
+!   June 1978
+!   EPRI NP-563
+!
+!------------------------------------------------------------------------------
+
+
+
+! Some general info for BWR
+!  3926 MWth        Ref. 5
+!  872 Assms        Ref. 5
+!  115.08012 Mlb/h  Ref. 5
+
+[STATE]
+  power               100.0
+  tinlet              600.0 K 
+  tfuel               900.0 K 
+  pressure             1040 ! psia Ref. 5
+  sym                  full
+  thexp                 off
+  feedback              off
+  void                  
+    0.0 50.0
+   20.0 60.0
+  ! add a control blade
+  rodbank               A 12
+  
+[CORE]
+  reactor_type          BWR
+  size                    2
+  apitch              15.24 ! for BWR (Ref. 5 has this as the pitch for BWR5 assemblies)
+  height           413.6263 ! cm
+  rated            4.50 0.1 ! estimate using ABWR data assume 10% bypass flow
+  core_shape       
+      1 1
+      1 1
+  assm_map       
+     GE14 GE14
+     GE14 GE14
+  crd_map
+     - -
+     - BLADE
+  crd_bank - -
+           - A
+  bc_rad         reflecting
+
+  ! use default bc (vacuum) for top and bottom 
+  ! bc_top         reflecting 
+  ! bc_bot         reflecting
+
+  mat            zr2 6.56 zirc2
+  mat            zr4 6.56 zirc4
+
+  lower_ref  ss 10.0584 0.13
+
+
+[ASSEMBLY]
+  title "GE14 (best estimate) Bundle"
+  npin                   10
+  ppitch                1.3 ! Ref. 4
+  gap            0.7549 0.7549 ! C lattice with 65 mil channel box and 13.4 cm internal channel box dim from Ref. 4
+  channel_box    zr4 0.1651 0.9652 0.0 0.0 ! thickness from Ref. 4 (rounded up by 0.0001 to be 65 mils), radius from old 80 mil design (Ref. 1)
+
+  fuel           UNAT 10.4  94.5 / 0.71
+  fuel           U16  10.4  94.5 / 1.6     ! non gad fuel density from Table A-3 in Ref. 4
+  fuel           U28  10.4  94.5 / 2.8
+  fuel           U32  10.4  94.5 / 3.2
+  fuel           U36  10.4  94.5 / 3.6
+  fuel           U40  10.4  94.5 / 3.95
+  fuel           U44  10.4  94.5 / 4.4
+  fuel           U49  10.4  94.5 / 4.9
+
+! gad pin density estimated using Ref. 2
+
+  fuel           U40G8 10.19  94.5 / 3.95 / gad=8.0 
+  fuel           U44G6 10.19  94.5 / 4.4  / gad=6.0
+  fuel           U44G3 10.19  94.5 / 4.4  / gad=3.0 
+  fuel           U49G8 10.19  94.5 / 4.9  / gad=8.0
+  fuel           U49G6 10.19  94.5 / 4.9  / gad=6.0
+  fuel           U44G8 10.19  94.5 / 4.4  / gad=8.0
+
+  ! pin dimensions from Ref. 4
+  cell           N  0.438 0.447 0.515 / UNAT  he zr2
+  cell           1  0.438 0.447 0.515 / U16   he zr2
+  cell           2  0.438 0.447 0.515 / U28   he zr2
+  cell           3  0.438 0.447 0.515 / U32   he zr2
+  cell           4  0.438 0.447 0.515 / U36   he zr2
+  cell           5  0.438 0.447 0.515 / U40   he zr2
+  cell           6  0.438 0.447 0.515 / U44   he zr2
+  cell           7  0.438 0.447 0.515 / U49   he zr2
+  cell           5G 0.438 0.447 0.515 / U40G8 he zr2
+  cell           6H 0.438 0.447 0.515 / U44G6 he zr2
+  cell           7G 0.438 0.447 0.515 / U49G8 he zr2
+  cell           7H 0.438 0.447 0.515 / U49G6 he zr2
+  cell           6K 0.438 0.447 0.515 / U44G3 he zr2
+  cell           6G 0.438 0.447 0.515 / U44G8 he zr2
+
+  ! WR dims from Ref. 4
+  cell           WR 1.17 1.245 / mod zr4 / large4
+
+  ! plugs radii estimated from Ref. 8 diagrams
+  cell           B             0.515 / zr2
+  cell           T             0.343 / zr2
+
+  ! vanished rod
+  cell           V              0.515 / cool
+
+  ! Plenum / Empty rod  ! plenum spring is neglected 
+  cell           P        0.447 0.515 / he zr2
+
+
+  
+
+  ! Lattices from Ref. 6
+  lattice NAT
+   N
+   N  N
+   N  N  N
+   N  N  N  N
+   N  N  N  N  N
+   N  N  N WR WR  N
+   N  N  N WR WR  N  N
+   N  N  N  N  N  N  N  N
+   N  N  N  N  N  N  N  N  N
+   N  N  N  N  N  N  N  N  N  N
+
+  lattice DOM
+    1
+    2  2
+    3  3  6K
+    5  5  6   7G
+    5  4  7H  5  7
+    5  5G 6   WR WR 7
+    5  5  6H  WR WR 7  7
+    5  6H 6   7  7  7  7G 7
+    5  5  6H  7  7  7G 7  7G 7
+    2  5  7   7  7  7  7  7  7  3
+
+  lattice PSZ
+    1
+    2  2
+    3  3  6K
+    5  5  6   7G
+    5  4  7G  5  7
+    5  5G 6   WR WR 7
+    5  5  6G  WR WR 7  7
+    5  6G 6   7  7  7  7G 7
+    5  5  6G  7  7  7G 7  7G 7
+    2  5  7   7  7  7  7  7  7  3 
+
+  lattice PLE
+    1
+    2  P
+    3  3  6
+    5  P  6   7G
+    5  4  7H  5  P
+    5  5  6   WR WR P
+    5  P  6H  WR WR 7  7
+    5  6H 6   7  7  7  7G 7
+    5  P  6H  P  7  7G P  7G P
+    2  5  7   7  7  7  7  7  7  3 
+
+  lattice VAN
+    1
+    2  V
+    3  3  6
+    5  V  6   7G
+    5  4  7H  5  V
+    5  5  6   WR WR V
+    5  V  6H  WR WR 7G 7
+    5  6H 6   7  7  7  7  7
+    5  V  6H  V  7  7G V  7G V
+    2  5  7   7  7  7  7  7  7  3 
+
+
+  lattice NV
+    N
+    N  V
+    N  N  N
+    N  V  N  N
+    N  N  N  N  V
+    N  N  N WR WR  V
+    N  V  N WR WR  N  N
+    N  N  N  N  N  N  N  N
+    N  V  N  V  N  N  V  N  V
+    N  N  N  N  N  N  N  N  N  N 
+
+  lattice NT
+    N
+    N  V
+    N  N  P
+    N  V  N  P
+    N  N  P  N  V
+    N  P  N WR WR  V
+    N  V  P WR WR  P  N
+    N  P  N  N  N  N  P  N
+    N  V  P  V  N  P  V  P  V
+    N  N  N  N  N  N  N  N  N  N 
+
+  lattice PLEN
+    P
+    P  V
+    P  P  P
+    P  V  P  P
+    P  P  P  P  V
+    P  P  P WR WR  V
+    P  V  P WR WR  P  P
+    P  P  P  P  P  P  P  P
+    P  V  P  V  P  P  V  P  V
+    P  P  P  P  P  P  P  P  P  P 
+
+  lattice PLUG
+    B
+    B  B
+    B  B  B
+    B  B  B  B
+    B  B  B  B  B
+    B  B  B  V  V  B
+    B  B  B  V  V  B  B
+    B  B  B  B  B  B  B  B
+    B  B  B  B  B  B  B  B  B
+    B  B  B  B  B  B  B  B  B  B
+
+  lattice PLP
+    1
+    2  T
+    3  3  6
+    5  T  6   7G
+    5  4  7H  5  T
+    5  5  6   WR WR  T
+    5  T  6H  WR WR  7  7
+    5  6H 6   7  7  7  7G  7
+    5  T  6H  T  7  7G T  7G T
+    2  5  7   7  7  7  7  7  7  3
+
+  lattice TPLUG
+    T
+    T  V
+    T  T  T
+    T  V  T  T
+    T  T  T  T  V
+    T  T  T  V  V  V
+    T  V  T  V  V  T  T
+    T  T  T  T  T  T  T  T
+    T  V  T  V  T  T  V  T  V
+    T  T  T  T  T  T  T  T  T  T 
+
+  axial GE14              7.1120 
+               PLUG      8.6995
+               NAT       23.9395
+               PSZ      145.8595
+               DOM      222.0595
+               PLE      250.4059
+               PLP      252.5395
+               VAN      347.1291
+               NV       362.3691
+               NT       377.6091
+               PLEN     403.0091  ! plenum height from Ref. 7
+               TPLUG    405.1427
+
+  ! grid data estimated from Ref. 8, loss coefficient unknown
+  grid MID zirc4 4.1275 348 / loss=0.9065
+    
+  grid_axial  
+    !     mid       bottom      top
+    MID  33.34390  !  31.28015 35.40765
+    MID  82.63260  !  80.56885 84.69635
+    MID 131.92130  ! 129.85755 133.98505
+    MID 181.21000  ! 179.14625 183.27375
+    MID 230.49870  ! 228.43495 232.56245
+    MID 279.78740  ! 277.72365 281.85115
+    MID 329.07610  ! 327.01235 331.13985
+    MID 379.67285  ! 377.60910 381.73660
+
+  ! nozzle data estimated from Ref. 8
+  lower_nozzle ss 7.1120 2392 ! mat, height, mass (g)
+  upper_nozzle ss 8.4836 1200 ! mat, height, mass (g)
+
+
+[CONTROL]
+  title          "GE OEM Control Blade"
+  ! blade data from Ref. 4, Table 2.4.2
+  ! theoretical B4C density taken to be 2.504 g/cc (Ref. 2, Pg. 2)
+  npin                    10
+  stroke          365.76  48
+
+  mat            ss304 8.0  ss
+  mat            abs   1.7528 b4c ! 70% theoretical density
+
+  cell           TUBE 0.17526 0.23876 / abs ss304
+
+  blade          21 TUBE 12.3825 0.79248 0.39624 0.14224  1.98501  ss304
+    
+  rodmap         EMPTY
+    TUBE
+    - -
+    - - -
+    - - - -
+    - - - - -
+    - - - - - -
+    - - - - - - -
+    - - - - - - - -
+    - - - - - - - - -
+    - - - - - - - - - -
+
+  axial          BLADE 0.0 EMPTY 1.0
+
+
+
+[EDITS]
+  axial_edit_bounds
+     7.1120
+     8.6995
+    16.3195
+    23.9395
+    31.28015
+    35.40765
+    46.6979
+    57.9882
+    69.2785
+    80.56885 
+    84.69635
+    93.0000
+   102.0000
+   111.0000
+   120.0000
+   129.85755
+   133.98505
+   139.9223
+   145.8595
+   156.0000
+   168.0000
+   179.14625
+   183.27375
+   191.0000
+   200.0000
+   209.0000
+   218.0000
+   222.0595
+   228.43495
+   232.56245
+   240.0000
+   250.4059
+   252.5395
+   262.0000
+   270.0000
+   277.72365
+   281.85115
+   290.0000
+   300.0000
+   310.0000
+   320.0000
+   327.01235
+   331.13985
+   340.0000
+   347.1291
+   354.7491
+   362.3691
+   369.9891
+   377.6091
+   381.7366
+   388.0000
+   395.0000
+   403.0091
+   405.1427
+
+[MPACT]
+  ! vis_edits             fsr
+  grid_treatment homogenize
+  ray_spacing          0.01
+  num_space              54
+  power_edit        FISSION
+  scattering             P2
