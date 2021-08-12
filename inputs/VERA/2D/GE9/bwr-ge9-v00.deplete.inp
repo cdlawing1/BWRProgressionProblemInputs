@@ -1,14 +1,20 @@
 [CASEID]
-  title 'Depletion of 2D GE9 BWR Lattice'
+  title 'Depletion of 2D GE9 BWR Lattice at 0.0% void'
 
 ! ==============================================================
-!  
+!
 !    CASL BWR Progression Problems
-!    Initial Version: Final Release Rev. 0
-!    Current Version: Final Release Rev. 0
+!    Initial Version: Release Rev. 0
+!    Current Version: Release Rev. 1
 !    https://github.com/cdlawing1/BWRProgressionProblemInputs
 !    Input Release Date: 9/30/2020
-!    Date Last Updated:  9/30/2020
+!    Date Last Updated:  8/09/2021
+!
+!    Updates:
+!      *) 8/09/2021:
+!          - Modified the inputs to use include files for the
+!            MPACT block, for water rod cells, and for the
+!            CONTROL block in controlled problems
 !
 ! ==============================================================
 
@@ -37,23 +43,21 @@
 !   March 1964
 !   Williamson & Zimmerman
 !
-!
 !------------------------------------------------------------------------------
 
 [STATE]
   power    100.0
   ! temperatures match MCNP/Serpent library temperatures
-  tinlet   600 K  ! *** approximate 
+  tinlet   600 K  ! *** approximate
   tfuel    900 K
   pressure 1040   ! psia
   sym      full
   thexp     off
   feedback  off
-  void    0.0     ! Progression Problems at 0, 40, 80
+  void    0.0
   deplete GWDMT 0.0 0.1 0.25 <0.5..25x0.25> <26.0..50x1.0>
   pred_order 1
   corr_order 2
-
 
 [CORE]
   reactor_type BWR
@@ -78,10 +82,9 @@
   npin   8
   ppitch 1.6256          ! pin pitch - does not include channel gaps
 
-!*** 80 mil design
+  !*** 80 mil design
   gap    0.9525 .47498   ! wide and narrow channel gap (cm)
   channel_box  zr4 0.2032 0.9652 0.0 0.0   ! channel dimensions
-
 
   fuel U16  10.0642 94.5 / 1.6
   fuel U20  10.0642 94.5 / 2.0
@@ -109,10 +112,8 @@
   cell 51 0.53213 0.61341 / U40G zr2
   cell 52 0.53213 0.61341 / U36G zr2
 
-!** water rod is smaller to fit in a pincell
-!** cell WR 1.6002 1.7018 / mod zr4 / large4
-
-  cell WR 1.60 1.62 / mod zr4 / large4
+  ! large water rod
+  include ../../include/ge9-wr.ini
 
   lattice LAT
     1
@@ -126,14 +127,7 @@
 
   axial ASSY 0.0 LAT 1.0
 
-
 [MPACT]
-  num_space      1
-  num_angle     -8
-  num_threads    1
-  grid_treatment homogenize   ! needed for BWR
-  ray_spacing 0.01            ! needed for BWR
-  power_edit   FISSION
-  scattering  P2
+  include ../../include/mpact2d.ini
   depl_time_method p-c
   dep_substep    1

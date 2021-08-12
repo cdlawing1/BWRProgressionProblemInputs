@@ -1,14 +1,14 @@
 [CASEID]
-  title '3D GE-14 Bundle at HZP'
+  title '3D GE-14 Bundle at HZP with control blade at position 28'
 
 ! ==============================================================
-!  
+!
 !    CASL BWR Progression Problems
-!    Initial Version: Final Release Rev. 0
-!    Current Version: Final Release Rev. 0
+!    Initial Version: Release Rev. 1
+!    Current Version: Release Rev. 1
 !    https://github.com/cdlawing1/BWRProgressionProblemInputs
-!    Input Release Date: 9/30/2020
-!    Date Last Updated:  9/30/2020
+!    Input Release Date: 8/09/2021
+!    Date Last Updated:  8/09/2021
 !
 ! ==============================================================
 
@@ -33,8 +33,8 @@
 !        IN THE DRESDEN NUCLEAR POWER STATION"
 !   March 1964
 !   Williamson & Zimmerman
-! 
-! Reference 4: 
+!
+! Reference 4:
 !   TR-10-13
 !   "Spent nuclear fuel for disposal in the KBS-3 Repository"
 !   Svensk Kärnbränslehantering AB
@@ -47,10 +47,10 @@
 !   GE Hitachi
 !   http://www.hitachi-hgne-uk-abwr.co.uk/downloads/2017-12-14/UKABWR-GA91-9101-0101-11000-RevC-PB.pdf
 !
-! Reference 6: 
+! Reference 6:
 !   "Optimum Boiling Water Reactor Fuel Design Strategies to
 !        Enhance Reactor Shutdown by the Standby Liquid Control System"
-!   Michael Fensin, UF thesis 
+!   Michael Fensin, UF thesis
 !   2004
 !   http://etd.fcla.edu/UF/UFE0005364/fensin_m.pdf
 !
@@ -59,17 +59,15 @@
 !   Chapter 2.2
 !   Fuel and Control Rods System
 !   https://www.nrc.gov/docs/ML1125/ML11258A302.pdf
-! 
+!
 ! Reference 8:
 !   "Core Design and Operating Data for Cycle 1 and Cycle 2 of Peach Bottom 2"
-!   N. H. Larsen 
-!   General Electric 
+!   N. H. Larsen
+!   General Electric
 !   June 1978
 !   EPRI NP-563
 !
 !------------------------------------------------------------------------------
-
-
 
 ! Some general info for BWR
 !  3926 MWth        Ref. 5
@@ -78,13 +76,15 @@
 
 [STATE]
   power               100.0
-  tinlet              600.0 K 
-  tfuel               600.0 K 
+  tinlet              600.0 K
+  tfuel               600.0 K
   pressure             1040 ! psia Ref. 5
   sym                  full
   thexp                 off
   feedback              off
   void                  0.0
+  ! add a control blade
+  rodbank               A 28
 
 [CORE]
   reactor_type          BWR
@@ -92,21 +92,23 @@
   apitch              15.24 ! for BWR (Ref. 5 has this as the pitch for BWR5 assemblies)
   height           413.6263 ! cm
   rated            4.50 0.1 ! estimate using ABWR data assume 10% bypass flow
-  core_shape       
+  core_shape
       1
-  assm_map       
+  assm_map
      GE14
+  crd_map
+     BLADE
+  crd_bank A
   bc_rad         reflecting
 
-  ! use default bc (vacuum) for top and bottom 
-  ! bc_top         reflecting 
+  ! use default bc (vacuum) for top and bottom
+  ! bc_top         reflecting
   ! bc_bot         reflecting
 
   mat            zr2 6.56 zirc2
   mat            zr4 6.56 zirc4
 
   lower_ref  ss 10.0584 0.13
-
 
 [ASSEMBLY]
   title "GE14 (best estimate) Bundle"
@@ -126,9 +128,9 @@
 
 ! gad pin density estimated using Ref. 2
 
-  fuel           U40G8 10.19  94.5 / 3.95 / gad=8.0 
+  fuel           U40G8 10.19  94.5 / 3.95 / gad=8.0
   fuel           U44G6 10.19  94.5 / 4.4  / gad=6.0
-  fuel           U44G3 10.19  94.5 / 4.4  / gad=3.0 
+  fuel           U44G3 10.19  94.5 / 4.4  / gad=3.0
   fuel           U49G8 10.19  94.5 / 4.9  / gad=8.0
   fuel           U49G6 10.19  94.5 / 4.9  / gad=6.0
   fuel           U44G8 10.19  94.5 / 4.4  / gad=8.0
@@ -149,21 +151,18 @@
   cell           6K 0.438 0.447 0.515 / U44G3 he zr2
   cell           6G 0.438 0.447 0.515 / U44G8 he zr2
 
-  ! WR dims from Ref. 4
-  cell           WR 1.17 1.245 / mod zr4 / large4
+  ! large water rod
+  include ../../include/ge14-wr.ini
 
   ! plugs radii estimated from Ref. 8 diagrams
   cell           B             0.515 / zr2
   cell           T             0.343 / zr2
 
   ! vanished rod
-  cell           V              0.515 / cool
+  include ../../include/ge14-vanishedrod.ini
 
-  ! Plenum / Empty rod  ! plenum spring is neglected 
+  ! Plenum / Empty rod  ! plenum spring is neglected
   cell           P        0.447 0.515 / he zr2
-
-
-  
 
   ! Lattices from Ref. 6
   lattice NAT
@@ -200,7 +199,7 @@
     5  5  6G  WR WR 7  7
     5  6G 6   7  7  7  7G 7
     5  5  6G  7  7  7G 7  7G 7
-    2  5  7   7  7  7  7  7  7  3 
+    2  5  7   7  7  7  7  7  7  3
 
   lattice PLE
     1
@@ -212,7 +211,7 @@
     5  P  6H  WR WR 7  7
     5  6H 6   7  7  7  7G 7
     5  P  6H  P  7  7G P  7G P
-    2  5  7   7  7  7  7  7  7  3 
+    2  5  7   7  7  7  7  7  7  3
 
   lattice VAN
     1
@@ -224,8 +223,7 @@
     5  V  6H  WR WR 7G 7
     5  6H 6   7  7  7  7  7
     5  V  6H  V  7  7G V  7G V
-    2  5  7   7  7  7  7  7  7  3 
-
+    2  5  7   7  7  7  7  7  7  3
 
   lattice NV
     N
@@ -237,7 +235,7 @@
     N  V  N WR WR  N  N
     N  N  N  N  N  N  N  N
     N  V  N  V  N  N  V  N  V
-    N  N  N  N  N  N  N  N  N  N 
+    N  N  N  N  N  N  N  N  N  N
 
   lattice NT
     N
@@ -249,7 +247,7 @@
     N  V  P WR WR  P  N
     N  P  N  N  N  N  P  N
     N  V  P  V  N  P  V  P  V
-    N  N  N  N  N  N  N  N  N  N 
+    N  N  N  N  N  N  N  N  N  N
 
   lattice PLEN
     P
@@ -261,7 +259,7 @@
     P  V  P WR WR  P  P
     P  P  P  P  P  P  P  P
     P  V  P  V  P  P  V  P  V
-    P  P  P  P  P  P  P  P  P  P 
+    P  P  P  P  P  P  P  P  P  P
 
   lattice PLUG
     B
@@ -297,9 +295,9 @@
     T  V  T  V  V  T  T
     T  T  T  T  T  T  T  T
     T  V  T  V  T  T  V  T  V
-    T  T  T  T  T  T  T  T  T  T 
+    T  T  T  T  T  T  T  T  T  T
 
-  axial GE14              7.1120 
+  axial GE14              7.1120
                PLUG      8.6995
                NAT       23.9395
                PSZ      145.8595
@@ -312,10 +310,10 @@
                PLEN     403.0091  ! plenum height from Ref. 7
                TPLUG    405.1427
 
-  ! grid data estimated from Ref. 8, loss coefficient unknown
+ ! grid data estimated from Ref. 8, loss coefficient unknown
   grid MID zirc4 4.1275 348 / loss=0.9065
 
-  grid_axial  
+  grid_axial
     !     mid       bottom      top
     MID  33.34390  !  31.28015 35.40765
     MID  82.63260  !  80.56885 84.69635
@@ -330,10 +328,12 @@
   lower_nozzle ss 7.1120 2392 ! mat, height, mass (g)
   upper_nozzle ss 8.4836 1200 ! mat, height, mass (g)
 
+[CONTROL]
+  include ../../include/control.ini
 
 [EDITS]
   axial_edit_bounds
-     7.1120
+!     7.1120
      8.6995
     16.3195
     23.9395
@@ -342,7 +342,7 @@
     46.6979
     57.9882
     69.2785
-    80.56885 
+    80.56885
     84.69635
     93.0000
    102.0000
@@ -382,16 +382,71 @@
    362.3691
    369.9891
    377.6091
-   381.7366
-   388.0000
-   395.0000
-   403.0091
-   405.1427
+!   381.7366
+!   388.0000
+!   395.0000
+!   403.0091
+!   405.1427
 
 [MPACT]
-  ! vis_edits             fsr
-  grid_treatment homogenize
-  ray_spacing          0.01
-  num_space              27
-  power_edit        FISSION
-  scattering             P2
+  include ../../include/mpact3d.ini
+  meshing_method useraxialmesh
+  axial_mesh
+     10.05840
+      7.11200
+      1.58750
+      7.62000
+      7.62000
+      7.34065
+      4.12750
+     11.29025
+     11.29030
+     11.29030
+     11.29035
+      4.12750
+      8.30365
+      9.00000
+      9.00000
+      9.00000
+      9.85755
+      4.12750
+      5.93725
+      5.93720
+     10.14050
+      2.55950
+      7.62000
+      1.82050
+     11.14625
+      4.12750
+      7.72625
+      9.00000
+      9.00000
+      9.00000
+      4.05950
+      6.37545
+      4.12750
+      7.43755
+     10.40590
+      2.13360
+      9.46050
+      8.00000
+      7.72365
+      4.12750
+      8.14885
+     10.00000
+     10.00000
+     10.00000
+      7.01235
+      4.12750
+      8.86015
+      7.12910
+      7.62000
+      7.62000
+      7.62000
+      7.62000
+      4.12750
+      6.26340
+      7.00000
+      8.00910
+      2.13360
+      8.48360

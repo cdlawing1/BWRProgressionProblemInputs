@@ -1,20 +1,16 @@
 [CASEID]
-  title '2D GE9 BWR Lattice with OEM Control Blade at 0.0% void'
+  title 'Depletion of 2D GE9 BWR Lattice at 40.0% void'
 
 ! ==============================================================
 !
 !    CASL BWR Progression Problems
-!    Initial Version: Draft Release 1
+!    Initial Version: Release Rev. 0
 !    Current Version: Release Rev. 1
 !    https://github.com/cdlawing1/BWRProgressionProblemInputs
-!    Input Release Date: 6/15/2020
+!    Input Release Date: 9/30/2020
 !    Date Last Updated:  8/09/2021
 !
 !    Updates:
-!      *) 9/30/2020:
-!          - Specifically turn off feedback
-!          - Specifically turn off thermal expansion
-!          - Use P2 scattering
 !      *) 8/09/2021:
 !          - Modified the inputs to use include files for the
 !            MPACT block, for water rod cells, and for the
@@ -56,23 +52,23 @@
   tfuel    900 K
   pressure 1040   ! psia
   sym      full
-  feedback  off
   thexp     off
-  rodbank A 0
-  void    0.0
+  feedback  off
+  void   40.0
+  deplete GWDMT 0.0 0.1 0.25 <0.5..25x0.25> <26.0..50x1.0>
+  pred_order 1
+  corr_order 2
 
 [CORE]
   reactor_type BWR
   size   1
   apitch 15.24  ! Ref. 1
   height 1.0
-  rated 0.01161288 0.01   ! *** approximate assume 50kW/L
+  rated 0.0188 0.01   ! estimate 40 W/g
   core_shape
     1
   assm_map
     ASSY
-  crd_map
-    BLADE
 
   bc_rad reflecting
   bc_top reflecting
@@ -80,7 +76,6 @@
 
   mat zr2  6.56 zirc2
   mat zr4  6.56 zirc4
-  crd_bank A
 
 [ASSEMBLY]
   ! Bundle Geometry, fuel densities, U-235 & Gad enrichment from Ref. 1
@@ -132,31 +127,7 @@
 
   axial ASSY 0.0 LAT 1.0
 
-[CONTROL]
-  title          "GE OEM Control Blade"
-  ! blade data from Ref. 2, Table 2.4.2
-  ! theoretical B4C density taken to be 2.504 g/cc (Ref. 3, Pg. 2)
-  npin                   8
-  stroke          365.76 48
-
-  mat            ss304 8.0  ss
-  mat            abs   1.7528 b4c ! 70% theoretical density
-
-  cell           TUBE 0.17526 0.23876 / abs ss304
-
-  blade          21 TUBE 12.3825 0.79248 0.39624 0.14224  1.98501  ss304
-
-  rodmap         EMPTY
-    TUBE
-    - -
-    - - -
-    - - - -
-    - - - - -
-    - - - - - -
-    - - - - - - -
-    - - - - - - - -
-
-  axial          BLADE 0.0 EMPTY 1.0
-
 [MPACT]
   include ../../include/mpact2d.ini
+  depl_time_method p-c
+  dep_substep    1

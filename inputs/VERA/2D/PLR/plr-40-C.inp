@@ -1,5 +1,5 @@
 [CASEID]
-  title '10x10 GE-14 Lattice with Vanished Rods: 0.0% void'
+  title '10x10 GE-14 Lattice with Vanished Rods and OEM Control Blade: 40.0% void'
 
 ! ==============================================================
 !
@@ -79,7 +79,8 @@
   sym                  full
   thexp                 off
   feedback              off
-  void                  0.0
+  rodbank               A 0
+  void                 40.0
 
 [CORE]
   reactor_type          BWR
@@ -91,11 +92,15 @@
       1
   assm_map
      ASSY1
+  crd_map
+    BLADE
+
   bc_rad         reflecting
   bc_top         reflecting
   bc_bot         reflecting
   mat            zr2 6.56 zirc2
   mat            zr4 6.56 zirc4
+  crd_bank   A
 
 [ASSEMBLY]
   title "GE14 (best estimate) lattice"
@@ -153,6 +158,34 @@
     2  5  7   7  7  7  7  7  7  3
 
   axial          ASSY1  0.0 LAT 1.0
+
+[CONTROL]
+  title          "GE OEM Control Blade"
+  ! blade data from Ref. 2, Table 2.4.2
+  ! theoretical B4C density taken to be 2.504 g/cc (Ref. 3, Pg. 2)
+  npin                  10
+  stroke          365.76 48
+
+  mat            ss304 8.0  ss
+  mat            abs   1.7528 b4c ! 70% theoretical density
+
+  cell           TUBE 0.17526 0.23876 / abs ss304
+
+  blade          21 TUBE 12.3825 0.79248 0.39624 0.14224  1.98501  ss304
+
+  rodmap         EMPTY
+    TUBE
+    - -
+    - - -
+    - - - -
+    - - - - -
+    - - - - - -
+    - - - - - - -
+    - - - - - - - -
+    - - - - - - - - -
+    - - - - - - - - - -
+
+  axial          BLADE 0.0 EMPTY 1.0
 
 [MPACT]
   include ../../include/mpact2d.ini

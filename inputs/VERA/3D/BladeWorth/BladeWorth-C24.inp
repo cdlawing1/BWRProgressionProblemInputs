@@ -1,20 +1,14 @@
 [CASEID]
-  title '3D Minicore at HFP'
+  title '3D GE-14 Bundle at HZP with control blade at position 24'
 
 ! ==============================================================
 !
 !    CASL BWR Progression Problems
-!    Initial Version: Release Rev. 0
+!    Initial Version: Release Rev. 1
 !    Current Version: Release Rev. 1
 !    https://github.com/cdlawing1/BWRProgressionProblemInputs
-!    Input Release Date: 9/30/2020
+!    Input Release Date: 8/09/2021
 !    Date Last Updated:  8/09/2021
-!
-!    Updates:
-!      *) 8/09/2021:
-!          - Modified the inputs to use include files for the
-!            MPACT block, for water rod cells, and for the
-!            CONTROL block in controlled problems
 !
 ! ==============================================================
 
@@ -83,50 +77,28 @@
 [STATE]
   power               100.0
   tinlet              600.0 K
-  tfuel               900.0 K
+  tfuel               600.0 K
   pressure             1040 ! psia Ref. 5
   sym                  full
   thexp                 off
   feedback              off
-  void
-    10.0 60.0 10.0 60.0
-    60.0 10.0 60.0 10.0
-    10.0 60.0 10.0 60.0
-    60.0 10.0 60.0 10.0
+  void                  0.0
   ! add a control blade
-  rodbank  A 30
-           B 40
-           C 42
-           D 36
+  rodbank               A 24
 
 [CORE]
   reactor_type          BWR
-  size                    4
+  size                    1
   apitch              15.24 ! for BWR (Ref. 5 has this as the pitch for BWR5 assemblies)
   height           413.6263 ! cm
   rated            4.50 0.1 ! estimate using ABWR data assume 10% bypass flow
   core_shape
-      1 1 1 1
-      1 1 1 1
-      1 1 1 1
-      1 1 1 1
+      1
   assm_map
-     GE14 GE14 GE14 GE14
-     GE14 GE14 GE14 GE14
-     GE14 GE14 GE14 GE14
-     GE14 GE14 GE14 GE14
+     GE14
   crd_map
-     BLADE -  BLADE   -
-       -   -    -     -
-     BLADE -  BLADE   -
-       -   -    -     -
-
-  crd_bank
-     A -  B -
-     - -  - -
-     C -  D -
-     - -  - -
-
+     BLADE
+  crd_bank A
   bc_rad         reflecting
 
   ! use default bc (vacuum) for top and bottom
@@ -338,7 +310,7 @@
                PLEN     403.0091  ! plenum height from Ref. 7
                TPLUG    405.1427
 
-  ! grid data estimated from Ref. 8, loss coefficient unknown
+ ! grid data estimated from Ref. 8, loss coefficient unknown
   grid MID zirc4 4.1275 348 / loss=0.9065
 
   grid_axial
@@ -428,32 +400,26 @@
       7.34065
       4.12750
      11.29025
-      5.18160
-      6.10870
-      1.51130
-      7.62000
-      2.15900
-      5.46100
-      5.82935
+     11.29030
+     11.29030
+     11.29035
       4.12750
       8.30365
-      4.59950
-      4.40050
-      3.21950
-      5.78050
+      9.00000
+      9.00000
       9.00000
       9.85755
       4.12750
       5.93725
-      3.39720
-      2.54000
-      5.08000
-      5.06050
+      5.93720
+     10.14050
      12.00000
      11.14625
       4.12750
-      7.72625
-      9.00000
+      5.76575
+      1.96050
+      5.65950
+      3.34050
       9.00000
       9.00000
       4.05950

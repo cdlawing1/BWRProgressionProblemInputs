@@ -1,5 +1,5 @@
 [CASEID]
-  title '10x10 GE-14 Lattice with Vanished Rods: 0.0% void'
+  title '10x10 GE-14 Lattice with OEM Control Blade: 80.0% void'
 
 ! ==============================================================
 !
@@ -15,7 +15,6 @@
 !          - Specifically turn off feedback
 !          - Specifically turn off thermal expansion
 !          - Use P2 scattering
-!          - Use 'cool' instead of 'mod' in vanished rods
 !      *) 8/09/2021:
 !          - Modified the inputs to use include files for the
 !            MPACT block, for water rod cells, and for the
@@ -77,9 +76,10 @@
   tfuel               900.0 K
   pressure             1040 ! psia Ref. 5
   sym                  full
-  thexp                 off
   feedback              off
-  void                  0.0
+  thexp                 off
+  rodbank               A 0
+  void                 80.0
 
 [CORE]
   reactor_type          BWR
@@ -91,11 +91,14 @@
       1
   assm_map
      ASSY1
+  crd_map
+    BLADE
   bc_rad         reflecting
   bc_top         reflecting
   bc_bot         reflecting
   mat            zr2 6.56 zirc2
   mat            zr4 6.56 zirc4
+  crd_bank   A
 
 [ASSEMBLY]
   title "GE14 (best estimate) lattice"
@@ -112,7 +115,7 @@
   fuel           U44  10.4  94.5 / 4.4
   fuel           U49  10.4  94.5 / 4.9
 
-  ! gad pin density estimated using Ref. 2
+! gad pin density estimated using Ref. 2
 
   fuel           U40G8 10.19  94.5 / 3.95 / gad=8.0
   fuel           U44G6 10.19  94.5 / 4.4  / gad=6.0
@@ -133,26 +136,52 @@
   cell           7G 0.438 0.447 0.515 / U49G8 he zr2
   cell           7H 0.438 0.447 0.515 / U49G6 he zr2
   cell           6K 0.438 0.447 0.515 / U44G3 he zr2
-  ! vanished rod
-  include ../../include/ge14-vanishedrod.ini
+
   ! large water rod
   include ../../include/ge14-wr.ini
 
   lattice        LAT
 
-  ! pattern from Ref. 6 VAN region
+  ! pattern from Ref. 6 DOM region
     1
-    2  V
-    3  3  6
-    5  V  6   7G
-    5  4  7H  5  V
-    5  5  6   WR WR V
-    5  V  6H  WR WR 7G 7
-    5  6H 6   7  7  7  7  7
-    5  V  6H  V  7  7G V  7G V
+    2  2
+    3  3  6K
+    5  5  6   7G
+    5  4  7H  5  7
+    5  5G 6   WR WR 7
+    5  5  6H  WR WR 7  7
+    5  6H 6   7  7  7  7G 7
+    5  5  6H  7  7  7G 7  7G 7
     2  5  7   7  7  7  7  7  7  3
 
   axial          ASSY1  0.0 LAT 1.0
+
+[CONTROL]
+  title          "GE OEM Control Blade"
+  ! blade data from Ref. 2, Table 2.4.2
+  ! theoretical B4C density taken to be 2.504 g/cc (Ref. 3, Pg. 2)
+  npin                  10
+  stroke          365.76 48
+
+  mat            ss304 8.0  ss
+  mat            abs   1.7528 b4c ! 70% theoretical density
+
+  cell           TUBE 0.17526 0.23876 / abs ss304
+  blade          21 TUBE 12.3825 0.79248 0.39624 0.14224  1.98501  ss304
+
+  rodmap         EMPTY
+    TUBE
+    - -
+    - - -
+    - - - -
+    - - - - -
+    - - - - - -
+    - - - - - - -
+    - - - - - - - -
+    - - - - - - - - -
+    - - - - - - - - - -
+
+  axial          BLADE 0.0 EMPTY 1.0
 
 [MPACT]
   include ../../include/mpact2d.ini

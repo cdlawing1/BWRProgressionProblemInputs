@@ -1,5 +1,5 @@
 [CASEID]
-  title 'BWR Peach Bottom 2 Design 6 8x8 with OEM Control Blade at 0.0% void'
+  title 'BWR Peach Bottom 2 Design 6 8x8 with OEM Control Blade at 80.0% void'
 
 ! ==============================================================
 !
@@ -54,7 +54,7 @@
   feedback  off
   thexp     off
   rodbank   A 0
-  void      0.0
+  void     80.0
 
 [CORE]
   reactor_type BWR

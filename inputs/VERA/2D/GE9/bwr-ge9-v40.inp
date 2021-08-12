@@ -1,5 +1,5 @@
 [CASEID]
-  title '2D GE9 BWR Lattice with OEM Control Blade at 0.0% void'
+  title '2D GE9 BWR Lattice at 40.0% void'
 
 ! ==============================================================
 !
@@ -58,8 +58,7 @@
   sym      full
   feedback  off
   thexp     off
-  rodbank A 0
-  void    0.0
+  void     40.0
 
 [CORE]
   reactor_type BWR
@@ -71,8 +70,6 @@
     1
   assm_map
     ASSY
-  crd_map
-    BLADE
 
   bc_rad reflecting
   bc_top reflecting
@@ -80,7 +77,6 @@
 
   mat zr2  6.56 zirc2
   mat zr4  6.56 zirc4
-  crd_bank A
 
 [ASSEMBLY]
   ! Bundle Geometry, fuel densities, U-235 & Gad enrichment from Ref. 1
@@ -131,32 +127,6 @@
     3  7  9 10 10 10  9  6
 
   axial ASSY 0.0 LAT 1.0
-
-[CONTROL]
-  title          "GE OEM Control Blade"
-  ! blade data from Ref. 2, Table 2.4.2
-  ! theoretical B4C density taken to be 2.504 g/cc (Ref. 3, Pg. 2)
-  npin                   8
-  stroke          365.76 48
-
-  mat            ss304 8.0  ss
-  mat            abs   1.7528 b4c ! 70% theoretical density
-
-  cell           TUBE 0.17526 0.23876 / abs ss304
-
-  blade          21 TUBE 12.3825 0.79248 0.39624 0.14224  1.98501  ss304
-
-  rodmap         EMPTY
-    TUBE
-    - -
-    - - -
-    - - - -
-    - - - - -
-    - - - - - -
-    - - - - - - -
-    - - - - - - - -
-
-  axial          BLADE 0.0 EMPTY 1.0
 
 [MPACT]
   include ../../include/mpact2d.ini

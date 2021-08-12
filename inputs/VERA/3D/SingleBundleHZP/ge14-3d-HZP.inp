@@ -1,5 +1,5 @@
 [CASEID]
-  title '3D Minicore at HFP'
+  title '3D GE-14 Bundle at HZP'
 
 ! ==============================================================
 !
@@ -21,7 +21,6 @@
 !------------------------------------------------------------------------------
 !
 ! Reference 1:
-!
 !   "Depletion of a BWR Lattice Using the RACER Continuous Energy Monte Carlo Code"
 !   D. J. Kelly
 !   Proc. Int. Conf. on Math and Comp., Reactor Physics, and Env. Analysis,
@@ -83,50 +82,23 @@
 [STATE]
   power               100.0
   tinlet              600.0 K
-  tfuel               900.0 K
+  tfuel               600.0 K
   pressure             1040 ! psia Ref. 5
   sym                  full
   thexp                 off
   feedback              off
-  void
-    10.0 60.0 10.0 60.0
-    60.0 10.0 60.0 10.0
-    10.0 60.0 10.0 60.0
-    60.0 10.0 60.0 10.0
-  ! add a control blade
-  rodbank  A 30
-           B 40
-           C 42
-           D 36
+  void                  0.0
 
 [CORE]
   reactor_type          BWR
-  size                    4
+  size                    1
   apitch              15.24 ! for BWR (Ref. 5 has this as the pitch for BWR5 assemblies)
   height           413.6263 ! cm
   rated            4.50 0.1 ! estimate using ABWR data assume 10% bypass flow
   core_shape
-      1 1 1 1
-      1 1 1 1
-      1 1 1 1
-      1 1 1 1
+      1
   assm_map
-     GE14 GE14 GE14 GE14
-     GE14 GE14 GE14 GE14
-     GE14 GE14 GE14 GE14
-     GE14 GE14 GE14 GE14
-  crd_map
-     BLADE -  BLADE   -
-       -   -    -     -
-     BLADE -  BLADE   -
-       -   -    -     -
-
-  crd_bank
-     A -  B -
-     - -  - -
-     C -  D -
-     - -  - -
-
+     GE14
   bc_rad         reflecting
 
   ! use default bc (vacuum) for top and bottom
@@ -356,9 +328,6 @@
   lower_nozzle ss 7.1120 2392 ! mat, height, mass (g)
   upper_nozzle ss 8.4836 1200 ! mat, height, mass (g)
 
-[CONTROL]
-  include ../../include/control.ini
-
 [EDITS]
   axial_edit_bounds
 !     7.1120
@@ -418,69 +387,3 @@
 
 [MPACT]
   include ../../include/mpact3d.ini
-  meshing_method useraxialmesh
-  axial_mesh
-     10.05840
-      7.11200
-      1.58750
-      7.62000
-      7.62000
-      7.34065
-      4.12750
-     11.29025
-      5.18160
-      6.10870
-      1.51130
-      7.62000
-      2.15900
-      5.46100
-      5.82935
-      4.12750
-      8.30365
-      4.59950
-      4.40050
-      3.21950
-      5.78050
-      9.00000
-      9.85755
-      4.12750
-      5.93725
-      3.39720
-      2.54000
-      5.08000
-      5.06050
-     12.00000
-     11.14625
-      4.12750
-      7.72625
-      9.00000
-      9.00000
-      9.00000
-      4.05950
-      6.37545
-      4.12750
-      7.43755
-     10.40590
-      2.13360
-      9.46050
-      8.00000
-      7.72365
-      4.12750
-      8.14885
-     10.00000
-     10.00000
-     10.00000
-      7.01235
-      4.12750
-      8.86015
-      7.12910
-      7.62000
-      7.62000
-      7.62000
-      7.62000
-      4.12750
-      6.26340
-      7.00000
-      8.00910
-      2.13360
-      8.48360

@@ -1,5 +1,5 @@
 [CASEID]
-  title 'BWR Peach Bottom 2 Design 6 8x8 with OEM Control Blade at 0.0% void'
+  title '2D GE9 BWR Lattice with OEM Control Blade at 40.0% void'
 
 ! ==============================================================
 !
@@ -24,18 +24,23 @@
 
 !------------------------------------------------------------------------------
 !
-!  Design 6 (LTA)
-!  8x8 with 100 mil channel
-!  2 water rods
-!  2% gad
+! *** Note that this input deck is not correct because we do not currently model
+! *** the oversize GE9 water rod at this time
+! *** The large water rod diameter has been reduced to fit in 2 pincells
 !
 ! Reference 1:
+!   D. J. Kelly,
+!   "Depletion of a BWR Lattice Using the RACER Continuous Energy Monte Carlo Code,"
+!   Proc. Int. Conf. on Math and Comp., Reactor Physics, and Env. Analysis,
+!   Portland, Oregon, USA, April 30-May 4 (1995).
+!
+! Reference 2:
 !   NEA/NSC/DOC(2001)1
 !   BOILING WATER REACTOR TURBINE TRIP (TT) BENCHMARK
 !   Volume I: Final Specifications
 !   February 2001
 !
-! Reference 2:
+! Reference 3:
 !   APED-4426
 !   EFFECTS OF IRRADIATION ON B4C FILLED STAINLESS STEEL TUBES
 !        IN THE DRESDEN NUCLEAR POWER STATION
@@ -46,79 +51,91 @@
 
 [STATE]
   power    100.0
-  ! modify temps to compare with Monte Carlo reference
-  tinlet   600 K  ! *** average operating temperature, not inlet
+  ! temperatures match MCNP/Serpent library temperatures
+  tinlet   600 K  ! *** approximate
   tfuel    900 K
   pressure 1040   ! psia
   sym      full
   feedback  off
   thexp     off
-  rodbank   A 0
-  void      0.0
+  rodbank A 0
+  void   40.0
 
 [CORE]
   reactor_type BWR
   size   1
-  apitch 15.24
+  apitch 15.24  ! Ref. 1
   height 1.0
-  rated  0.01 0.01   ! *** approximate
+  rated 0.01161288 0.01   ! *** approximate assume 50kW/L
   core_shape
     1
   assm_map
     ASSY
   crd_map
     BLADE
+
   bc_rad reflecting
   bc_top reflecting
   bc_bot reflecting
-  mat zr2  6.5514 zirc2      ! zirc density Ref. 1, p. 39
-  mat zr4  6.5514 zirc4
-  mat he   0.000176 he-4
-  crd_bank    A
+
+  mat zr2  6.56 zirc2
+  mat zr4  6.56 zirc4
+  crd_bank A
 
 [ASSEMBLY]
+  ! Bundle Geometry, fuel densities, U-235 & Gad enrichment from Ref. 1
   npin   8
   ppitch 1.6256          ! pin pitch - does not include channel gaps
 
-  !*** 100 mil design
-  gap    0.9017 .42418   ! wide and narrow channel gap (cm)
-  channel_box zr4 0.254 0.9652 0.0 0.0   ! channel dimensions
+  !*** 80 mil design
+  gap    0.9525 .47498   ! wide and narrow channel gap (cm)
+  channel_box  zr4 0.2032 0.9652 0.0 0.0   ! channel dimensions
 
-  !*** enrichments Ref. 1, p. 18
-  !*** density and materials Ref. 1, p. 12
+  fuel U16  10.0642 94.5 / 1.6
+  fuel U20  10.0642 94.5 / 2.0
+  fuel U22  10.0642 94.5 / 2.2
+  fuel U24  10.0642 94.5 / 2.4
+  fuel U26  10.0642 94.5 / 2.6
+  fuel U28  10.0642 94.5 / 2.8
+  fuel U30  10.0642 94.5 / 3.0
+  fuel U36  10.0642 94.5 / 3.6
+  fuel U36G  9.939  94.5 / 3.6 / gad=4.0
+  fuel U38  10.0642 94.5 / 3.8
+  fuel U40  10.0642 94.5 / 3.95
+  fuel U40G  9.939  94.5 / 3.95 / gad=4.0
 
-  fuel U301  10.32 94.5 / 3.01
-  fuel U222  10.32 94.5 / 2.22
-  fuel U187  10.32 94.5 / 1.87
-  fuel U145  10.32 94.5 / 1.45
-  fuel U3G   10.23 94.5 / 3.01 / gad=2.0
+  cell  1 0.53213 0.61341 / U16  zr2
+  cell  2 0.53213 0.61341 / U20  zr2
+  cell  3 0.53213 0.61341 / U22  zr2
+  cell  4 0.53213 0.61341 / U24  zr2
+  cell  5 0.53213 0.61341 / U26  zr2
+  cell  6 0.53213 0.61341 / U28  zr2
+  cell  7 0.53213 0.61341 / U30  zr2
+  cell  8 0.53213 0.61341 / U36  zr2
+  cell  9 0.53213 0.61341 / U38  zr2
+  cell 10 0.53213 0.61341 / U40  zr2
+  cell 51 0.53213 0.61341 / U40G zr2
+  cell 52 0.53213 0.61341 / U36G zr2
 
-  cell 1   0.5207 0.53213 0.61341 / U301 he zr2
-  cell 2   0.5207 0.53213 0.61341 / U222 he zr2
-  cell 3   0.5207 0.53213 0.61341 / U187 he zr2
-  cell 4   0.5207 0.53213 0.61341 / U145 he zr2
-  cell 5G  0.5207 0.53213 0.61341 / U3G  he zr2
-
-  ! import water rod
-  include ../../include/pb6-wr.ini
+  ! large water rod
+  include ../../include/ge9-wr.ini
 
   lattice LAT
-    4
-    3  2
-    2  1  1
-    2  5G 1  1
-    2  1  1 WR  1
-    2  1  1  1  1  1
-    2  1  5G 1  1  1 5G
-    3  2  1  1  1  1  1  2
+    1
+    2  6
+    4  8 10
+    6 10 52 WR
+    6 10 10 WR WR
+    6 10 51 10 10 10
+    5  9 10 51 10 51 10
+    3  7  9 10 10 10  9  6
 
   axial ASSY 0.0 LAT 1.0
 
 [CONTROL]
   title          "GE OEM Control Blade"
-  ! blade data from Table 2.4.2 of Ref. 1
-  ! theoretical B4C density taken to be 2.504 g/cc (Ref. 2, Pg. 2)
-
+  ! blade data from Ref. 2, Table 2.4.2
+  ! theoretical B4C density taken to be 2.504 g/cc (Ref. 3, Pg. 2)
   npin                   8
   stroke          365.76 48
 
@@ -126,6 +143,7 @@
   mat            abs   1.7528 b4c ! 70% theoretical density
 
   cell           TUBE 0.17526 0.23876 / abs ss304
+
   blade          21 TUBE 12.3825 0.79248 0.39624 0.14224  1.98501  ss304
 
   rodmap         EMPTY

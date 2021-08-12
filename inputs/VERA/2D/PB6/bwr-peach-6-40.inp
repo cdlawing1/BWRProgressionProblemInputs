@@ -1,5 +1,5 @@
 [CASEID]
-  title 'BWR Peach Bottom 2 Design 6 8x8 with OEM Control Blade at 0.0% void'
+  title 'BWR Peach Bottom 2 Design 6 8x8 at 40.0% void'
 
 ! ==============================================================
 !
@@ -53,8 +53,7 @@
   sym      full
   feedback  off
   thexp     off
-  rodbank   A 0
-  void      0.0
+  void     40.0
 
 [CORE]
   reactor_type BWR
@@ -66,26 +65,23 @@
     1
   assm_map
     ASSY
-  crd_map
-    BLADE
   bc_rad reflecting
   bc_top reflecting
   bc_bot reflecting
   mat zr2  6.5514 zirc2      ! zirc density Ref. 1, p. 39
   mat zr4  6.5514 zirc4
   mat he   0.000176 he-4
-  crd_bank    A
 
 [ASSEMBLY]
   npin   8
   ppitch 1.6256          ! pin pitch - does not include channel gaps
 
-  !*** 100 mil design
+!*** 100 mil design
   gap    0.9017 .42418   ! wide and narrow channel gap (cm)
   channel_box zr4 0.254 0.9652 0.0 0.0   ! channel dimensions
 
-  !*** enrichments Ref. 1, p. 18
-  !*** density and materials Ref. 1, p. 12
+!*** enrichments Ref. 1, p. 18
+!*** density and materials Ref. 1, p. 12
 
   fuel U301  10.32 94.5 / 3.01
   fuel U222  10.32 94.5 / 2.22
@@ -113,32 +109,6 @@
     3  2  1  1  1  1  1  2
 
   axial ASSY 0.0 LAT 1.0
-
-[CONTROL]
-  title          "GE OEM Control Blade"
-  ! blade data from Table 2.4.2 of Ref. 1
-  ! theoretical B4C density taken to be 2.504 g/cc (Ref. 2, Pg. 2)
-
-  npin                   8
-  stroke          365.76 48
-
-  mat            ss304 8.0  ss
-  mat            abs   1.7528 b4c ! 70% theoretical density
-
-  cell           TUBE 0.17526 0.23876 / abs ss304
-  blade          21 TUBE 12.3825 0.79248 0.39624 0.14224  1.98501  ss304
-
-  rodmap         EMPTY
-    TUBE
-    - -
-    - - -
-    - - - -
-    - - - - -
-    - - - - - -
-    - - - - - - -
-    - - - - - - - -
-
-  axial          BLADE 0.0 EMPTY 1.0
 
 [MPACT]
   include ../../include/mpact2d.ini

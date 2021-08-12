@@ -1,5 +1,5 @@
 [CASEID]
-  title '10x10 GE-14 Lattice with Vanished Rods: 0.0% void'
+title '4x4 array of GE-14 bundles with 20% average void'
 
 ! ==============================================================
 !
@@ -15,7 +15,6 @@
 !          - Specifically turn off feedback
 !          - Specifically turn off thermal expansion
 !          - Use P2 scattering
-!          - Use 'cool' instead of 'mod' in vanished rods
 !      *) 8/09/2021:
 !          - Modified the inputs to use include files for the
 !            MPACT block, for water rod cells, and for the
@@ -77,20 +76,31 @@
   tfuel               900.0 K
   pressure             1040 ! psia Ref. 5
   sym                  full
-  thexp                 off
   feedback              off
-  void                  0.0
+  thexp                 off
+  void
+    10.0 20.0 20.0 10.0
+    20.0 30.0 30.0 20.0
+    20.0 30.0 30.0 20.0
+    10.0 20.0 20.0 10.0
 
 [CORE]
   reactor_type          BWR
-  size                    1
+  size                    4
   apitch              15.24 ! for BWR (Ref. 5 has this as the pitch for BWR5 assemblies)
   height                1.0
-  rated           0.0122 0.01 ! estimate using ABWR data assume 10% bypass flow
+  rated         0.1952 0.16 ! estimate using ABWR data assume 10% bypass flow
   core_shape
-      1
+      1 1 1 1
+      1 1 1 1
+      1 1 1 1
+      1 1 1 1
   assm_map
-     ASSY1
+     ASSY1 ASSY1 ASSY1 ASSY1
+     ASSY1 ASSY1 ASSY1 ASSY1
+     ASSY1 ASSY1 ASSY1 ASSY1
+     ASSY1 ASSY1 ASSY1 ASSY1
+
   bc_rad         reflecting
   bc_top         reflecting
   bc_bot         reflecting
@@ -133,23 +143,21 @@
   cell           7G 0.438 0.447 0.515 / U49G8 he zr2
   cell           7H 0.438 0.447 0.515 / U49G6 he zr2
   cell           6K 0.438 0.447 0.515 / U44G3 he zr2
-  ! vanished rod
-  include ../../include/ge14-vanishedrod.ini
-  ! large water rod
+  ! WR dims from Ref. 4
   include ../../include/ge14-wr.ini
 
   lattice        LAT
 
-  ! pattern from Ref. 6 VAN region
+  ! pattern from Ref. 6 DOM region
     1
-    2  V
-    3  3  6
-    5  V  6   7G
-    5  4  7H  5  V
-    5  5  6   WR WR V
-    5  V  6H  WR WR 7G 7
-    5  6H 6   7  7  7  7  7
-    5  V  6H  V  7  7G V  7G V
+    2  2
+    3  3  6K
+    5  5  6   7G
+    5  4  7H  5  7
+    5  5G 6   WR WR 7
+    5  5  6H  WR WR 7  7
+    5  6H 6   7  7  7  7G 7
+    5  5  6H  7  7  7G 7  7G 7
     2  5  7   7  7  7  7  7  7  3
 
   axial          ASSY1  0.0 LAT 1.0

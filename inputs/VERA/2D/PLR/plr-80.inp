@@ -1,5 +1,5 @@
 [CASEID]
-  title '10x10 GE-14 Lattice with Vanished Rods: 0.0% void'
+  title '10x10 GE-14 Lattice with Vanished Rods: 80.0% void'
 
 ! ==============================================================
 !
@@ -79,7 +79,7 @@
   sym                  full
   thexp                 off
   feedback              off
-  void                  0.0
+  void                 80.0
 
 [CORE]
   reactor_type          BWR
